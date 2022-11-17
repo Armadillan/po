@@ -1,0 +1,53 @@
+from collections import deque
+
+class Node:
+
+    def __init__(self, M, children):
+        self.M = M
+        self.children = children
+        self.I = 0
+
+
+N = int(input())
+
+vertices = []
+is_root = [True] * N
+num_parents = [0] * N
+
+for i in range(N):
+    description = [int(x) for x in input().split()]
+    M = description[0]
+    children = dict()
+    for i in range(2, len(description), 2):
+        # description is 1-indexed :((
+        child_index = description[i] - 1
+        child_weight = description[i+1] / 100
+        children[child_index] = child_weight
+        # if is child, then is not root
+        is_root[child_index] = False
+        # add one to number of parents
+        num_parents[child_index] += 1
+    vertices.append(Node(M, children))
+
+roots = [i for i, val in enumerate(is_root) if val]
+for root in roots:
+    vertices[root].I = vertices[root].M
+
+queue = deque(roots)
+
+while queue:
+    vertex = vertices[queue.popleft()]
+    for child_index, weight in vertex.children.items():
+        child = vertices[child_index]
+        child.I += min(vertex.M, vertex.I) * weight
+        num_parents[child_index] -= 1
+        if num_parents[child_index] == 0:
+            queue.append(child_index)
+
+out = []
+
+for index, vertex in enumerate(vertices):
+    if not vertex.M - vertex.I > 1e-4:
+        out.append(str(index + 1))
+
+print(" ".join(out))
