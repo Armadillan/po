@@ -1,6 +1,6 @@
 from collections import deque
 
-class Node:
+class Vertex:
 
     def __init__(self, M, children):
         self.M = M
@@ -11,8 +11,9 @@ class Node:
 N = int(input())
 
 vertices = []
-is_root = [True] * N
 num_parents = [0] * N
+
+is_root = [True] * N
 
 for i in range(N):
     description = [int(x) for x in input().split()]
@@ -27,7 +28,7 @@ for i in range(N):
         is_root[child_index] = False
         # add one to number of parents
         num_parents[child_index] += 1
-    vertices.append(Node(M, children))
+    vertices.append(Vertex(M, children))
 
 roots = [i for i, val in enumerate(is_root) if val]
 for root in roots:
