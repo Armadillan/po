@@ -1,7 +1,8 @@
 from z3 import *
 
 #indata!!!
-people = list(map(int, input().split()))
+people_by_strength = list(map(int, input().split()))
+people = [i+1 for i in range(4) for _ in range(people_by_strength[i])]
 
 # gör om indatan till en Z3-array
 A = Array('A', IntSort(), IntSort())
